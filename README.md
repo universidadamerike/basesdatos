@@ -56,7 +56,7 @@ sistemavulnerable/
 ├── scriptbdtienda.sql        # Dump completo (estructura + datos actuales) para replicar la BD tal cual está hoy
 ├── templates/                # Vistas HTML (Bootstrap 5)
 ├── csrf_poc/                 # Prueba de concepto de CSRF (ver inyection.md)
-└── venv/                     # Entorno virtual de Python (generado localmente)
+└── venv/                     # Entorno virtual local (se crea al ejecutar run.sh)
 ```
 
 ## 1. Crear la base de datos
@@ -89,58 +89,46 @@ categorías, 10 productos, 5 ventas, 8 líneas de detalle).
 
 ## 2. Preparar el entorno Python
 
-Ya se creó un entorno virtual en `venv/` con Flask y PyMySQL
-instalados. Para recrearlo manualmente:
+Se requiere Python 3 con el módulo `venv`. El entorno `venv/` es local,
+no se descarga desde GitHub y se crea automáticamente al ejecutar
+`run.sh`. En el primer arranque se instalan las dependencias listadas en
+`requirements.txt` (se necesita conexión a Internet). Para prepararlo
+manualmente:
 
 ```bash
-python3 -m venv --without-pip venv
-./venv/bin/python -m ensurepip --upgrade    # o usar get-pip.py si falla
-./venv/bin/pip install -r requirements.txt
+python3 -m venv venv
+./venv/bin/python -m pip install -r requirements.txt
 ```
 
 ## 3. Ejecutar la aplicación
 
-⚠️ **Importante**: el proyecto usa un entorno virtual (`venv/`) donde
-están instaladas las dependencias (Flask, PyMySQL). Si ejecutas
-`python app.py` o `python3 app.py` directamente (usando el Python del
-sistema operativo en vez del venv), obtendrás el error
-`ModuleNotFoundError: No module named 'flask'`.
+El script está pensado para Linux/macOS con Bash, Python 3 y el módulo
+`venv` instalados. También se necesita un servidor MySQL accesible y la
+base de datos preparada en el paso 1. En Windows, se puede ejecutar
+desde WSL.
 
-Usa una de estas dos opciones:
-
-**Opción A (recomendada): script de arranque**
+Desde la carpeta del proyecto:
 ```bash
 ./run.sh
 ```
-Este script detecta y usa automáticamente el Python del entorno
-virtual (y lo crea/instala dependencias si no existe). También solicita
-la contraseña de MySQL de forma oculta si `DB_PASSWORD` no está definida.
-
-**Opción B: invocar directamente el Python del venv**
-```bash
-./venv/bin/python app.py
-```
-
-**Opción C: activar el entorno virtual primero**
-```bash
-source venv/bin/activate
-python app.py
-```
+El script crea o repara `venv/`, instala las dependencias y ejecuta la
+aplicación con el Python del entorno virtual. Si se usa otro ejecutable
+de Python 3, se puede indicar con `PYTHON_BIN`, por ejemplo
+`PYTHON_BIN=python3.12 ./run.sh`. Solicita la contraseña de MySQL de
+forma oculta si `DB_PASSWORD` no está definida.
 
 La aplicación quedará disponible en `http://127.0.0.1:5000`.
 
 Las credenciales de conexión a MySQL pueden configurarse con las
 variables de entorno `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD` y
 `DB_NAME`. Por seguridad, la contraseña no está guardada en el código.
-`./run.sh` la solicita automáticamente cuando hace falta.
-
-Si inicias la aplicación directamente con Python (opciones B o C), carga
-la contraseña en la terminal antes de arrancarla, sin dejarla en el
-historial de comandos:
+`./run.sh` la solicita automáticamente cuando hace falta. Para pasarla
+sin interacción, por ejemplo al usar un gestor de secretos, expórtala
+antes de ejecutar el script:
 
 ```bash
-read -s -p "Contraseña MySQL: " DB_PASSWORD; echo
 export DB_PASSWORD
+./run.sh
 ```
 
 ## 4. Usuarios de prueba (login legítimo)
