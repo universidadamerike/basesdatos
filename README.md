@@ -15,6 +15,10 @@ Assignment): ver [inyection.md](inyection.md).
 y línea afectados, código corregido): ver
 [cambios_codigo.md](cambios_codigo.md).
 
+🎓 **Introducción para la presentación previa al laboratorio**
+(historia, características, clases comunes y prevención): ver
+[presentacion_sqlinjection.md](presentacion_sqlinjection.md).
+
 ## ¿Qué incluye?
 
 - Base de datos MySQL `tienda_vulnerable` para una tienda departamental,
