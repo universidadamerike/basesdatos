@@ -19,6 +19,10 @@ y línea afectados, código corregido): ver
 (historia, características, clases comunes y prevención): ver
 [presentacion_sqlinjection.md](presentacion_sqlinjection.md).
 
+🧭 **Riesgos adicionales y ejercicios defensivos** sobre privilegios,
+almacenamiento de contraseñas, autorización, CSRF, errores, disponibilidad
+y gestión de secretos: ver [riesgos_adicionales.md](riesgos_adicionales.md).
+
 ## ¿Qué incluye?
 
 - Base de datos MySQL `tienda_vulnerable` para una tienda departamental,
