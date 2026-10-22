@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block titulo %}Nuevo cliente{% endblock %}
+{% block contenido %}
+<h2 class="mb-4">➕ Registrar nuevo cliente</h2>
+
+{% if error_guardado %}
+<div class="alert alert-danger">{{ error_guardado }}</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('clientes_nuevo') }}">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control" name="nombre" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Apellido</label>
+                    <input type="text" class="form-control" name="apellido" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text" class="form-control" name="telefono">
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label">Dirección</label>
+                    <input type="text" class="form-control" name="direccion">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Ciudad</label>
+                    <input type="text" class="form-control" name="ciudad">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Guardar cliente</button>
+            <a href="{{ url_for('clientes') }}" class="btn btn-outline-secondary mt-4">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+<div class="alert alert-info mt-3">
+    <strong>Nota para la demo:</strong> este formulario guarda los datos con una
+    consulta parametrizada (segura). El riesgo aparece después, al ver el
+    "Resumen de compras" del cliente recién creado.
+</div>
+{% endblock %}

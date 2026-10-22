@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% from "_error_sql.html" import mostrar_error %}
+{% block titulo %}Ventas{% endblock %}
+{% block contenido %}
+<h2 class="mb-4">🧾 Módulo de Ventas</h2>
+
+<form method="GET" action="{{ url_for('ventas') }}" class="row g-2 mb-3">
+    <div class="col-md-8">
+        <input type="text" class="form-control" name="cliente" value="{{ termino }}"
+               placeholder="Buscar ventas por nombre de cliente...">
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+    </div>
+    <div class="col-md-2">
+        <a href="{{ url_for('ventas') }}" class="btn btn-outline-secondary w-100">Ver todas</a>
+    </div>
+</form>
+
+{{ mostrar_error(error_sql) }}
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID Venta</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Método de pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in ventas %}
+                <tr>
+                    <td>{{ v.id }}</td>
+                    <td>{{ v.cliente }}</td>
+                    <td>{{ v.fecha_venta }}</td>
+                    <td>L. {{ v.total }}</td>
+                    <td>{{ v.metodo_pago }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-center text-muted">Sin resultados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

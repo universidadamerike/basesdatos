@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block titulo %}Panel principal{% endblock %}
+{% block contenido %}
+<h2 class="mb-4">Panel principal</h2>
+<div class="row g-3">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h6 class="card-title">Clientes</h6>
+                <p class="display-6 mb-0">{{ total_clientes }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h6 class="card-title">Productos</h6>
+                <p class="display-6 mb-0">{{ total_productos }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h6 class="card-title">Ventas realizadas</h6>
+                <p class="display-6 mb-0">{{ total_ventas }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-dark">
+            <div class="card-body">
+                <h6 class="card-title">Total vendido</h6>
+                <p class="display-6 mb-0">L. {{ "%.2f"|format(monto_total) }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Bienvenido/a, {{ session.get('nombre_usuario') }}</h5>
+        <p class="card-text">
+            Usa el menú superior para navegar entre los módulos de <strong>Clientes</strong>,
+            <strong>Productos</strong> y <strong>Ventas</strong>.
+        </p>
+    </div>
+</div>
+{% endblock %}

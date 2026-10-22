@@ -1,0 +1,13 @@
+{% macro mostrar_error(error_sql) %}
+{% if error_sql %}
+<div class="alert alert-danger mt-3">
+    <h5 class="alert-heading">💥 Error de Base de Datos</h5>
+    <p class="mb-1"><strong>Motor detectado:</strong> {{ error_sql.motor }}</p>
+    <p class="mb-1"><strong>Código de error:</strong> {{ error_sql.codigo }}</p>
+    <p class="mb-1"><strong>Mensaje del servidor:</strong> {{ error_sql.mensaje }}</p>
+    <hr>
+    <p class="mb-0"><strong>Consulta SQL ejecutada (vulnerable):</strong></p>
+    <pre class="bg-dark text-light p-2 rounded small mb-0"><code>{{ error_sql.consulta }}</code></pre>
+</div>
+{% endif %}
+{% endmacro %}

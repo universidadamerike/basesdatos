@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% from "_error_sql.html" import mostrar_error %}
+{% block titulo %}Resumen de cliente{% endblock %}
+{% block contenido %}
+<h2 class="mb-4">🧾 Resumen de compras del cliente</h2>
+
+{% if not cliente %}
+<div class="alert alert-warning">Cliente no encontrado.</div>
+{% else %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ cliente.nombre }} {{ cliente.apellido }}</h5>
+        <p class="card-text mb-0">
+            Email: {{ cliente.email }} &middot; Teléfono: {{ cliente.telefono }} &middot;
+            Ciudad: {{ cliente.ciudad }}
+        </p>
+    </div>
+</div>
+
+{{ mostrar_error(error_sql) }}
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-striped mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID Venta</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                    <th>Método de pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in ventas %}
+                <tr>
+                    <td>{{ v.id }}</td>
+                    <td>L. {{ v.total }}</td>
+                    <td>{{ v.fecha_venta }}</td>
+                    <td>{{ v.metodo_pago }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="text-center text-muted">Este cliente no tiene compras registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<a href="{{ url_for('clientes') }}" class="btn btn-outline-secondary mt-3">Volver a Clientes</a>
+{% endblock %}

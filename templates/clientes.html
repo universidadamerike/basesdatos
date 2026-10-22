@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% from "_error_sql.html" import mostrar_error %}
+{% block titulo %}Clientes{% endblock %}
+{% block contenido %}
+<h2 class="mb-4">👥 Módulo de Clientes</h2>
+
+<div class="mb-3">
+    <a href="{{ url_for('clientes_nuevo') }}" class="btn btn-success btn-sm">➕ Registrar nuevo cliente</a>
+</div>
+
+<form method="GET" action="{{ url_for('clientes') }}" class="row g-2 mb-3">
+    <div class="col-md-8">
+        <input type="text" class="form-control" name="q" value="{{ termino }}"
+               placeholder="Buscar por nombre o apellido...">
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+    </div>
+    <div class="col-md-2">
+        <a href="{{ url_for('clientes') }}" class="btn btn-outline-secondary w-100">Limpiar</a>
+    </div>
+</form>
+
+{{ mostrar_error(error_sql) }}
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Ciudad</th>
+                    <th>Resumen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in clientes %}
+                <tr>
+                    <td>{{ c.id }}</td>
+                    <td>{{ c.nombre }}</td>
+                    <td>{{ c.apellido }}</td>
+                    <td>{{ c.email }}</td>
+                    <td>{{ c.telefono }}</td>
+                    <td>{{ c.direccion }}</td>
+                    <td>{{ c.ciudad }}</td>
+                    <td>
+                        {% if c.id %}
+                        <a href="{{ url_for('clientes_resumen', cliente_id=c.id) }}" class="btn btn-sm btn-outline-primary">Ver</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="8" class="text-center text-muted">Sin resultados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

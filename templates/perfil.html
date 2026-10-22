@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% from "_error_sql.html" import mostrar_error %}
+{% block titulo %}Mi perfil{% endblock %}
+{% block contenido %}
+<h2 class="mb-4">👤 Perfil de usuario</h2>
+
+<form method="GET" action="{{ url_for('perfil') }}" class="row g-2 mb-3">
+    <div class="col-md-8">
+        <input type="text" class="form-control" name="usuario_id" value="{{ usuario_id }}"
+               placeholder="ID de usuario a consultar...">
+    </div>
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-primary w-100">Consultar</button>
+    </div>
+</form>
+
+{{ mostrar_error(error_sql) }}
+
+{% if perfil %}
+<div class="card mb-4">
+    <div class="card-body">
+        <table class="table mb-0">
+            <tr><th>ID</th><td>{{ perfil.id }}</td></tr>
+            <tr><th>Usuario</th><td>{{ perfil.nombre_usuario }}</td></tr>
+            <tr><th>Contraseña</th><td>{{ perfil.password }}</td></tr>
+            <tr><th>Nombre completo</th><td>{{ perfil.nombre_completo }}</td></tr>
+            <tr><th>Rol</th><td>{{ perfil.rol }}</td></tr>
+            <tr><th>Email</th><td>{{ perfil.email }}</td></tr>
+            <tr><th>Creado</th><td>{{ perfil.fecha_creacion }}</td></tr>
+        </table>
+    </div>
+</div>
+{% elif not error_sql %}
+<div class="alert alert-warning">No se encontró ningún usuario con ese ID.</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Actualizar mi perfil</h5>
+        <form method="POST" action="{{ url_for('actualizar_perfil') }}">
+            <div class="mb-3">
+                <label class="form-label">Nombre completo</label>
+                <input type="text" class="form-control" name="nombre_completo"
+                       value="{{ session.get('nombre_usuario') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" placeholder="tu@correo.com">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Rol</label>
+                <select class="form-select" name="rol">
+                    <option value="empleado" {{ 'selected' if session.get('rol')=='empleado' }}>Empleado</option>
+                    <option value="gerente" {{ 'selected' if session.get('rol')=='gerente' }}>Gerente</option>
+                    <option value="auditor" {{ 'selected' if session.get('rol')=='auditor' }}>Auditor</option>
+                    <option value="administrador" {{ 'selected' if session.get('rol')=='administrador' }}>Administrador</option>
+                </select>
+                <div class="form-text">
+                    Este campo no debería ser editable por el propio usuario
+                    (vulnerabilidad de Mass Assignment, ver inyection.md).
+                </div>
+            </div>
+            <button type="submit" class="btn btn-warning">Guardar cambios</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
