@@ -109,7 +109,8 @@ Usa una de estas dos opciones:
 ./run.sh
 ```
 Este script detecta y usa automáticamente el Python del entorno
-virtual (y lo crea/instala dependencias si no existe).
+virtual (y lo crea/instala dependencias si no existe). También solicita
+la contraseña de MySQL de forma oculta si `DB_PASSWORD` no está definida.
 
 **Opción B: invocar directamente el Python del venv**
 ```bash
@@ -124,13 +125,14 @@ python app.py
 
 La aplicación quedará disponible en `http://127.0.0.1:5000`.
 
-Las credenciales de conexión a MySQL están en [config.py](config.py) y
-pueden sobreescribirse con variables de entorno: `DB_HOST`, `DB_PORT`,
-`DB_USER`, `DB_PASSWORD`, `DB_NAME`.
+Las credenciales de conexión a MySQL pueden configurarse con las
+variables de entorno `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD` y
+`DB_NAME`. Por seguridad, la contraseña no está guardada en el código.
+`./run.sh` la solicita automáticamente cuando hace falta.
 
-Por seguridad, la contraseña no está guardada en el código. Antes de
-iniciar la aplicación, cárgala en la variable de entorno sin dejarla en
-el historial de comandos:
+Si inicias la aplicación directamente con Python (opciones B o C), carga
+la contraseña en la terminal antes de arrancarla, sin dejarla en el
+historial de comandos:
 
 ```bash
 read -s -p "Contraseña MySQL: " DB_PASSWORD; echo
